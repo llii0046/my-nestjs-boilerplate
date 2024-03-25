@@ -10,7 +10,6 @@ import { ConfigurationKeyPaths } from '@/config/configuration';
 
 // common provider list
 const providers = [UtilService, RedisService];
-
 /**
  * Global shared module
  */

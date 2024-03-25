@@ -1,24 +1,18 @@
 import {
   Controller,
-  Get,
-  Req,
   Post,
-  HttpCode,
-  Header,
-  Param,
   Body,
 } from '@nestjs/common';
-import { AdminService } from './admin.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginToken } from './admin.class';
-import { LoginDto } from './dto';
 import { LoginService } from './login/login.service';
+import { LoginInfoDto } from './login/login.dto';
+import { ADMIN_PREFIX } from '@/constants/admin';
 
 @ApiTags('Admin')
-@Controller('admins')
+@Controller(ADMIN_PREFIX)
 export class AdminsController {
   constructor(
-    private adminService: AdminService,
     private loginService: LoginService,
   ) {}
 
@@ -27,11 +21,12 @@ export class AdminsController {
   })
   @ApiOkResponse({ type: LoginToken })
   @Post('login')
-  async login(@Body() dto: LoginDto): Promise<LoginToken> {
+  async login(@Body() dto: LoginInfoDto, ua: string): Promise<LoginToken> {
+    await this.loginService.checkImgCaptcha(dto.captchaId, dto.verifyCode);
     const token = await this.loginService.getLoginSign(
       dto.username,
       dto.password,
-      dto.ua
+      ua,
     );
     return { token };
   }
