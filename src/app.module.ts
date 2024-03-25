@@ -6,6 +6,8 @@ import {
   ConfigurationKeyPaths,
   getConfiguration,
 } from './config/configuration';
+import { AdminModule } from './modules/admin/admin.module';
+import { SharesModule } from './shares/shares.module';
 
 @Module({
   imports: [
@@ -31,7 +33,9 @@ import {
         };
       },
     }),
+    SharesModule,
     ProductsModule,
+    AdminModule
   ],
 })
 export class AppModule {}

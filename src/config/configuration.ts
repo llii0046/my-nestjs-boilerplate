@@ -25,7 +25,18 @@ export const getConfiguration = () => ({
     title: process.env.SWAGGER_TITLE,
     desc: process.env.SWAGGER_DESC,
     version: process.env.SWAGGER_VERSION
-  }
+  },
+
+  jwt: {
+    secret: process.env.JWT_SECRET || '123456',
+  },
+
+  redis: {
+    host: process.env.REDIS_HOST, // default value
+    port: parseInt(process.env.REDIS_PORT, 10), // default value
+    password: process.env.REDIS_PASSWORD,
+    db: process.env.REDIS_DB,
+  },
 });
 
 export type ConfigurationType = ReturnType<typeof getConfiguration>;
