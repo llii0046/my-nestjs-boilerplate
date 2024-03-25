@@ -1,19 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { setupSwagger } from './setup-swagger';
+import { Logger } from '@nestjs/common';
+
+const SERVER_PORT = process.env.SERVER_PORT;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  const config = new DocumentBuilder()
-    .setTitle('Priceworth Furniture')
-    .setDescription('Api document for priceworth furniture - by Ryan')
-    .setVersion('1.0')
-    .build();
-
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
-    
-  await app.listen(3000);
+  setupSwagger(app);
+  await app.listen(SERVER_PORT, '0.0.0.0');
+  const serverUrl = await app.getUrl();
+  Logger.log(`The API service has started, please visit: ${serverUrl}`);
+  Logger.log(
+    `The API documentation has been generated, please visit: ${serverUrl}/${process.env.SWAGGER_PATH}/`,
+  );
 }
 bootstrap();
