@@ -1,8 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginToken } from './admin.class';
 import { LoginService } from './login/login.service';
@@ -12,9 +8,7 @@ import { ADMIN_PREFIX } from '@/constants/admin';
 @ApiTags('Admin')
 @Controller(ADMIN_PREFIX)
 export class AdminsController {
-  constructor(
-    private loginService: LoginService,
-  ) {}
+  constructor(private loginService: LoginService) {}
 
   @ApiOperation({
     summary: 'Admin login',

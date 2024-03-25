@@ -24,7 +24,7 @@ export const getConfiguration = () => ({
     path: process.env.SWAGGER_PATH,
     title: process.env.SWAGGER_TITLE,
     desc: process.env.SWAGGER_DESC,
-    version: process.env.SWAGGER_VERSION
+    version: process.env.SWAGGER_VERSION,
   },
 
   jwt: {

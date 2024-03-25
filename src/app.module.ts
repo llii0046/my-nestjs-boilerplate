@@ -35,7 +35,7 @@ import { SharesModule } from './shares/shares.module';
     }),
     SharesModule,
     ProductsModule,
-    AdminModule
+    AdminModule,
   ],
 })
 export class AppModule {}
