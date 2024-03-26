@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Headers, Post, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ImageCaptchaDto } from './login.dto';
+import { ImageCaptchaDto } from '../dto';
 import { ImageCaptcha } from './login.class';
 import { LoginService } from './login.service';
 

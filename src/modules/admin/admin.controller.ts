@@ -2,7 +2,7 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginToken } from './admin.class';
 import { LoginService } from './login/login.service';
-import { LoginInfoDto } from './login/login.dto';
+import { LoginDto } from './dto';
 import { ADMIN_PREFIX } from '@/constants/admin';
 
 @ApiTags('Admin')
@@ -15,12 +15,11 @@ export class AdminsController {
   })
   @ApiOkResponse({ type: LoginToken })
   @Post('login')
-  async login(@Body() dto: LoginInfoDto, ua: string): Promise<LoginToken> {
+  async login(@Body() dto: LoginDto): Promise<LoginToken> {
     await this.loginService.checkImgCaptcha(dto.captchaId, dto.verifyCode);
     const token = await this.loginService.getLoginSign(
       dto.username,
       dto.password,
-      ua,
     );
     return { token };
   }

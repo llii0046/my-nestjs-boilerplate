@@ -8,9 +8,10 @@ import { isEmpty } from 'lodash';
 import * as svgCaptcha from 'svg-captcha';
 import { UtilService } from '@/shares/services/util.service';
 import { RedisService } from '@/shares/services/redis.service';
-import { ImageCaptchaDto } from './login.dto';
+import { ImageCaptchaDto } from '../dto';
 import { ImageCaptcha } from './login.class';
 import { AdminService } from '../admin.service';
+import { ADMIN_USER } from '@/constants/admin';
 
 @Injectable()
 export class LoginService {
@@ -66,11 +67,7 @@ export class LoginService {
    * Get login JWT
    * If null is returned, the account password is incorrect and the user does not exist.
    */
-  async getLoginSign(
-    username: string,
-    password: string,
-    ua: string,
-  ): Promise<string> {
+  async getLoginSign(username: string, password: string): Promise<string> {
     const admin = await this.adminService.findAdminByUserName(username);
     if (isEmpty(admin)) {
       throw new UnauthorizedException(
@@ -86,12 +83,8 @@ export class LoginService {
 
     const jwtSign = this.jwtService.sign({
       uid: parseInt(admin.id.toString()),
-      pv: 1,
+      role: ADMIN_USER,
     });
-
-    await this.redisService
-      .getRedis()
-      .set(`admin:passwordVersion:${admin.id}`, 1);
 
     await this.redisService
       .getRedis()

@@ -1,9 +1,9 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from './setup-swagger';
 import { Logger } from '@nestjs/common';
 import { LoggerService } from './shares/logger/logger.service';
-
+import { ApiTransformInterceptor } from '@/common/interceptors/api-transform.interceptor';
 const SERVER_PORT = process.env.SERVER_PORT;
 
 async function bootstrap() {
@@ -13,6 +13,8 @@ async function bootstrap() {
     credentials: true,
   });
   app.useLogger(app.get(LoggerService));
+  // api interceptor
+  app.useGlobalInterceptors(new ApiTransformInterceptor(new Reflector()));
   setupSwagger(app);
   await app.listen(SERVER_PORT, '0.0.0.0');
   const serverUrl = await app.getUrl();
