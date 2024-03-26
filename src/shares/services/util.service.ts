@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import * as CryptoJS from 'crypto-js';
+import CryptoJS from 'crypto-js';
 
 @Injectable()
 export class UtilService {
