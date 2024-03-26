@@ -8,6 +8,13 @@ import {
 } from './config/configuration';
 import { AdminModule } from './modules/admin/admin.module';
 import { SharesModule } from './shares/shares.module';
+import {
+  LoggerModuleOptions,
+  WinstonLogLevel,
+} from './shares/logger/logger.interface';
+import { LoggerModule } from './shares/logger/logger.module';
+import { TypeORMLoggerService } from './shares/logger/typeorm-logger.service';
+import { LOGGER_MODULE_OPTIONS } from './shares/logger/logger.constants';
 
 @Module({
   imports: [
@@ -17,9 +24,12 @@ import { SharesModule } from './shares/shares.module';
       envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService<ConfigurationKeyPaths>) => {
+      imports: [ConfigModule, LoggerModule],
+      inject: [ConfigService, LOGGER_MODULE_OPTIONS],
+      useFactory: (
+        configService: ConfigService<ConfigurationKeyPaths>,
+        loggerOptions: LoggerModuleOptions,
+      ) => {
         return {
           autoLoadEntities: true,
           type: configService.get<any>('database.type'),
@@ -30,9 +40,38 @@ import { SharesModule } from './shares/shares.module';
           database: configService.get<string>('database.database'),
           synchronize: configService.get<boolean>('database.synchronize'),
           logging: configService.get('database.logging'),
+          logger: new TypeORMLoggerService(
+            configService.get('database.logging'),
+            loggerOptions,
+          ),
         };
       },
     }),
+    LoggerModule.forRootAsync(
+      {
+        imports: [ConfigModule],
+        useFactory: (configService: ConfigService) => {
+          return {
+            level: configService.get<WinstonLogLevel>('logger.level'),
+            consoleLevel: configService.get<WinstonLogLevel>(
+              'logger.consoleLevel',
+            ),
+            timestamp: configService.get<boolean>('logger.timestamp'),
+            maxFiles: configService.get<string>('logger.maxFiles'),
+            maxFileSize: configService.get<string>('logger.maxFileSize'),
+            disableConsoleAtProd: configService.get<boolean>(
+              'logger.disableConsoleAtProd',
+            ),
+            dir: configService.get<string>('logger.dir'),
+            errorLogName: configService.get<string>('logger.errorLogName'),
+            appLogName: configService.get<string>('logger.appLogName'),
+          };
+        },
+        inject: [ConfigService],
+      },
+      // global module
+      true,
+    ),
     SharesModule,
     ProductsModule,
     AdminModule,
