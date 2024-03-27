@@ -7,6 +7,7 @@ import Product from '@/entities/product.entity';
 import { CreateProductDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PageDto, PageOptionsDto } from '@/shares/pagination/dto';
 
 @Injectable()
 export class ProductsService {
@@ -15,7 +16,7 @@ export class ProductsService {
     private productRepository: Repository<Product>,
   ) {}
 
-  async create(createProductDto: CreateProductDto): Promise<Product> {
+  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
     const existingProduct = await this.productRepository.findOne({
       where: { sku: createProductDto.sku },
     });
@@ -27,7 +28,7 @@ export class ProductsService {
     return newProduct;
   }
 
-  async findAll(): Promise<Product[]> {
+  async getProducts(): Promise<Product[]> {
     return this.productRepository.find();
   }
 

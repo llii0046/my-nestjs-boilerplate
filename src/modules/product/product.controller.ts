@@ -31,14 +31,14 @@ export class ProductsController {
   @HttpCode(201)
   @Roles(ADMIN_USER)
   async create(@Body() createProductDto: CreateProductDto): Promise<Product> {
-    return this.productsService.create(createProductDto);
+    return this.productsService.createProduct(createProductDto);
   }
 
   @ApiOperation({ summary: 'List all products' })
   @ApiOkResponsePaginated(Product)
   @Get('all')
   async findAll(): Promise<Product[]> {
-    return this.productsService.findAll();
+    return this.productsService.getProducts();
   }
 
   @ApiOperation({ summary: 'Find Product By id' })
