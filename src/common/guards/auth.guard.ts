@@ -1,4 +1,3 @@
-import { ADMIN_USER } from '@/constants/admin';
 import {
   Injectable,
   CanActivate,
@@ -8,9 +7,10 @@ import {
 import { Reflector } from '@nestjs/core';
 import { isEmpty, isEqual } from 'lodash';
 import { JwtService } from '@nestjs/jwt';
+import { ROLE_KEY_METADATE } from '../contants/decorator.contants';
 
 @Injectable()
-export class AdminGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
@@ -18,7 +18,7 @@ export class AdminGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.get<string[]>(
-      'roles',
+      ROLE_KEY_METADATE,
       context.getHandler(),
     );
     if (!requiredRoles) {
@@ -31,15 +31,15 @@ export class AdminGuard implements CanActivate {
     }
     try {
       // Mount the object to the current request
-      request[ADMIN_USER] = this.jwtService.verify(token);
+      request.user = this.jwtService.verify(token);
     } catch (e) {
       // Unable to pass token verification
       throw new UnauthorizedException('token is unacceptable');
     }
-    if (isEmpty(request[ADMIN_USER])) {
+    if (isEmpty(request.user)) {
       throw new UnauthorizedException('token is empty');
     }
-    if (!isEqual(request[ADMIN_USER].role, ADMIN_USER)) {
+    if (!requiredRoles.includes(request.user.role)) {
       throw new UnauthorizedException('no permission');
     }
     return true;

@@ -1,32 +1,48 @@
-import { Controller, Get, Post, HttpCode, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  HttpCode,
+  Param,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './product.service';
 import Product from '@/entities/product.entity';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponseData,
+  ApiOkResponsePaginated,
+} from '@/common/class/res.class';
+import { AuthGuard } from '@/common/guards/auth.guard';
+import { Roles } from '@/common/decorators/role.decorator';
+import { ADMIN_USER } from '@/constants/admin';
 
 @ApiTags('Products')
 @Controller('product')
+@UseGuards(AuthGuard)
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @ApiOperation({ summary: 'Add a product, need admin permission' })
-  @ApiOkResponse({ type: Product })
+  @ApiOkResponseData(Product)
   @Post()
   @HttpCode(201)
+  @Roles(ADMIN_USER)
   async create(@Body() createProductDto: CreateProductDto): Promise<Product> {
     return this.productsService.create(createProductDto);
   }
 
   @ApiOperation({ summary: 'List all products' })
-  @ApiOkResponse({ type: [Product] })
+  @ApiOkResponsePaginated(Product)
   @Get('all')
   async findAll(): Promise<Product[]> {
     return this.productsService.findAll();
   }
 
   @ApiOperation({ summary: 'Find Product By id' })
-  @ApiOkResponse({ type: Product })
+  @ApiOkResponseData(Product)
   @Get(':id')
   findOne(@Param('id') id: number): Promise<Product> {
     return this.productsService.findProductById(id);

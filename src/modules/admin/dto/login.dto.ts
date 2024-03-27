@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsString, MaxLength, MinLength } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, MaxLength, MinLength } from 'class-validator';
 
 export class LoginDto {
   @ApiProperty({ description: 'User name' })
@@ -13,7 +13,7 @@ export class LoginDto {
   @ApiProperty({ description: 'Verification code identification' })
   @IsString()
   captchaId: string;
-  
+
   @ApiProperty({ description: 'Verification code entered by the user' })
   @IsString()
   @MinLength(4)

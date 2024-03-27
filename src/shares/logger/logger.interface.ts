@@ -27,13 +27,13 @@ export interface LoggerModuleOptions {
   consoleLevel?: WinstonLogLevel | 'none';
 
   /**
-   * If enabled, the timestamp (time difference) 
+   * If enabled, the timestamp (time difference)
    * between the current and previous log message will be printed
    */
   timestamp?: boolean;
 
   /**
-   * In a production environment, terminal log output is turned off by default. 
+   * In a production environment, terminal log output is turned off by default.
    * If necessary, it can be set to false.
    */
   disableConsoleAtProd?: boolean;
@@ -54,21 +54,21 @@ export interface LoggerModuleOptions {
 
   /**
    * Directory of log output in development environment, absolute path
-   * In order to avoid conflicts and centralized management in the development environment, 
+   * In order to avoid conflicts and centralized management in the development environment,
    * logs will be printed in the logs directory under the project directory.
    */
   dir?: string;
 
   /**
-   * The log output by any logger's .error() call will be redirected here. 
-   * Focus on locating the exception by viewing this log. 
+   * The log output by any logger's .error() call will be redirected here.
+   * Focus on locating the exception by viewing this log.
    * The default file name is common-error.%DATE%.log
    * NOTE: This file name can contain the %DATE% placeholder
    */
   errorLogName?: string;
 
   /**
-   * Application related logs, logs used by application developers. 
+   * Application related logs, logs used by application developers.
    * We use it in most cases, the default file name is web.%DATE%.log
    * NOTE: This file name can contain the %DATE% placeholder
    */

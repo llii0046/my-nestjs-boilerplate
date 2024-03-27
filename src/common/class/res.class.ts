@@ -38,28 +38,49 @@ export class Pagination {
 }
 
 export class PaginatedResponseDto<T> {
-  list: Array<T>;
+  data: Array<T>;
 
   @ApiProperty()
   pagination: Pagination;
+
+  @ApiProperty()
+  readonly statusCode: number;
+
+  @ApiProperty()
+  readonly message: string;
 }
 
-export const ApiResponse = <
-  DataDto extends Type<unknown>,
-  WrapperDataDto extends Type<unknown>,
->(
+export const ApiOkResponseData = <DataDto extends Type<unknown>>(
   dataDto: DataDto,
-  wrapperDataDto: WrapperDataDto,
 ) =>
   applyDecorators(
-    ApiExtraModels(wrapperDataDto, dataDto),
+    ApiExtraModels(ResponseDto, dataDto),
     ApiOkResponse({
       schema: {
         allOf: [
-          { $ref: getSchemaPath(wrapperDataDto) },
+          { $ref: getSchemaPath(ResponseDto) },
           {
             properties: {
-              list: {
+              data: { $ref: getSchemaPath(dataDto) },
+            },
+          },
+        ],
+      },
+    }),
+  );
+
+export const ApiOkResponsePaginated = <DataDto extends Type<unknown>>(
+  dataDto: DataDto,
+) =>
+  applyDecorators(
+    ApiExtraModels(PaginatedResponseDto, dataDto),
+    ApiOkResponse({
+      schema: {
+        allOf: [
+          { $ref: getSchemaPath(PaginatedResponseDto) },
+          {
+            properties: {
+              data: {
                 type: 'array',
                 items: { $ref: getSchemaPath(dataDto) },
               },
@@ -69,11 +90,3 @@ export const ApiResponse = <
       },
     }),
   );
-
-export const ApiOkResponseData = <DataDto extends Type<unknown>>(
-  dataDto: DataDto,
-) => ApiResponse(dataDto, ResponseDto);
-
-export const ApiOkResponsePaginated = <DataDto extends Type<unknown>>(
-  dataDto: DataDto,
-) => ApiResponse(dataDto, PaginatedResponseDto);
