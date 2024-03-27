@@ -38,7 +38,7 @@ export class ProductsController {
   @ApiOkResponsePaginated(Product)
   @Get('all')
   async findAll(): Promise<Product[]> {
-    return this.productsService.getProducts();
+    return this.productsService.getAllProducts();
   }
 
   @ApiOperation({ summary: 'Find Product By id' })
