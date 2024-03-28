@@ -10,7 +10,7 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './product.service';
 import Product from '@/entities/product.entity';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   ApiOkResponseData,
   ApiOkResponsePaginated,
@@ -25,6 +25,7 @@ import { ADMIN_USER } from '@/constants/admin';
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Add a product, need admin permission' })
   @ApiOkResponseData(Product)
   @Post()

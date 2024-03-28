@@ -7,7 +7,6 @@ import Product from '@/entities/product.entity';
 import { CreateProductDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PageDto, PageOptionsDto } from '@/shares/pagination/dto';
 
 @Injectable()
 export class ProductsService {

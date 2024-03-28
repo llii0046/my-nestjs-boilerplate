@@ -15,7 +15,7 @@ async function bootstrap() {
   app.useLogger(app.get(LoggerService));
   // api interceptor
   app.useGlobalInterceptors(new ApiTransformInterceptor(new Reflector()));
-  app.useGlobalPipes(new ValidationPipe({transform: true}));
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   setupSwagger(app);
   await app.listen(SERVER_PORT, '0.0.0.0');
   const serverUrl = await app.getUrl();
