@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { isEmpty, isEqual } from 'lodash';
+import { isEmpty } from 'lodash';
 import { JwtService } from '@nestjs/jwt';
 import { ROLE_KEY_METADATE } from '../contants/decorator.contants';
 

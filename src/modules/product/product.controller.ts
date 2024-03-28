@@ -10,7 +10,12 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './product.service';
 import Product from '@/entities/product.entity';
-import { ApiBearerAuth, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   ApiOkResponseData,
   ApiOkResponsePaginated,
