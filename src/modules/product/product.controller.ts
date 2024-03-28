@@ -10,14 +10,14 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './product.service';
 import Product from '@/entities/product.entity';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import {
   ApiOkResponseData,
   ApiOkResponsePaginated,
 } from '@/common/class/res.class';
 import { AuthGuard } from '@/common/guards/auth.guard';
 import { Roles } from '@/common/decorators/role.decorator';
-import { ADMIN_USER } from '@/constants/admin';
+import { ADMIN_PREFIX, ADMIN_USER } from '@/constants/admin';
 
 @ApiTags('Products')
 @Controller('product')
@@ -28,6 +28,7 @@ export class ProductsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Add a product, need admin permission' })
   @ApiOkResponseData(Product)
+  @ApiSecurity(ADMIN_PREFIX)
   @Post()
   @HttpCode(201)
   @Roles(ADMIN_USER)
