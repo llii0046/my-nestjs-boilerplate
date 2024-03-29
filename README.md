@@ -43,7 +43,5 @@ npm install
 npm start
 ```
 
-## ScreenShot
-
 ## License
 MIT
